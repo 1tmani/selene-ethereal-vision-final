@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Arcane Archive — Dark Selene Collection</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;700&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--ice:#a0d2db;--silver:#c0b8a8;--deep:#060410;--accent:#d4a754}
+body{background:var(--deep);color:var(--silver);font-family:'Spectral',serif;overflow-x:hidden}
+
+/* ═══ TOP BAR ═══ */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:15px 30px;display:flex;justify-content:space-between;align-items:center;background:rgba(6,4,16,.9);backdrop-filter:blur(12px);border-bottom:1px solid rgba(212,167,84,.05)}
+.topbar a{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:4px;color:rgba(192,184,168,.3);text-decoration:none;text-transform:uppercase;transition:color .3s}
+.topbar a:hover{color:var(--accent)}
+.topbar .brand{font-family:'Cinzel Decorative',serif;font-size:.9rem;color:var(--accent);letter-spacing:6px}
+
+/* ═══ HERO ═══ */
+.archive-hero{height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 20px;position:relative;overflow:hidden}
+.archive-hero::before{content:'';position:absolute;inset:0;background:url('assets/img/concept_grid.png') center/cover;opacity:.08;filter:blur(2px)}
+.archive-hero h1{font-family:'Cinzel Decorative',serif;font-size:clamp(1.5rem,4vw,2.5rem);color:var(--accent);letter-spacing:12px;text-transform:uppercase;position:relative;z-index:1}
+.archive-hero p{font-family:'Spectral',serif;font-size:.9rem;color:rgba(192,184,168,.4);font-style:italic;margin-top:12px;letter-spacing:3px;position:relative;z-index:1}
+
+/* ═══ FILTER TABS ═══ */
+.filters{position:sticky;top:50px;z-index:500;padding:15px 20px;display:flex;justify-content:center;gap:15px;flex-wrap:wrap;background:rgba(6,4,16,.95);backdrop-filter:blur(10px)}
+.filter-btn{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:4px;padding:8px 18px;border:1px solid rgba(212,167,84,.08);background:transparent;color:rgba(192,184,168,.3);cursor:pointer;text-transform:uppercase;transition:all .3s}
+.filter-btn:hover,.filter-btn.active{color:var(--accent);border-color:rgba(212,167,84,.3)}
+
+/* ═══ MASONRY GALLERY ═══ */
+.masonry{columns:4;column-gap:12px;padding:30px 20px;max-width:1400px;margin:0 auto}
+.m-item{break-inside:avoid;margin-bottom:12px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.02);cursor:pointer;transition:all .5s}
+.m-item:hover{border-color:rgba(212,167,84,.15);box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.m-item img,.m-item video{width:100%;display:block;filter:brightness(.5);transition:filter .5s,transform .8s}
+.m-item:hover img,.m-item:hover video{filter:brightness(.75);transform:scale(1.02)}
+.m-item .m-label{position:absolute;bottom:0;left:0;right:0;padding:15px;background:linear-gradient(transparent,rgba(6,4,16,.95));opacity:0;transform:translateY(10px);transition:all .4s}
+.m-item:hover .m-label{opacity:1;transform:translateY(0)}
+.m-label h4{font-family:'Cinzel',serif;font-size:.65rem;color:var(--accent);letter-spacing:3px;margin-bottom:3px}
+.m-label span{font-size:.55rem;color:rgba(192,184,168,.3);letter-spacing:2px}
+.m-item.vid-item::before{content:'▶';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;color:rgba(212,167,84,.5);font-size:1.5rem;pointer-events:none;transition:all .3s}
+.m-item.vid-item:hover::before{color:rgba(212,167,84,.9);font-size:2rem}
+
+/* ═══ MUSIC SECTION ═══ */
+.music-section{padding:80px 20px;max-width:800px;margin:0 auto}
+.music-section h2{font-family:'Cinzel Decorative',serif;font-size:1rem;color:var(--accent);letter-spacing:8px;text-align:center;margin-bottom:40px}
+.track-list{display:flex;flex-direction:column;gap:8px}
+.track-row{display:flex;align-items:center;gap:15px;padding:15px 20px;border:1px solid rgba(255,255,255,.02);cursor:pointer;transition:all .3s}
+.track-row:hover,.track-row.playing{border-color:rgba(212,167,84,.15);background:rgba(212,167,84,.02)}
+.track-play{width:30px;height:30px;border:1px solid rgba(212,167,84,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .3s}
+.track-play::after{content:'▶';color:var(--accent);font-size:.5rem}
+.track-row.playing .track-play::after{content:'❚❚'}
+.track-row.playing .track-play{border-color:var(--accent);box-shadow:0 0 15px rgba(212,167,84,.1)}
+.track-info{flex:1}
+.track-info h4{font-family:'Cinzel',serif;font-size:.75rem;color:rgba(192,184,168,.6);letter-spacing:3px;margin-bottom:2px}
+.track-info span{font-size:.6rem;color:rgba(192,184,168,.2);letter-spacing:2px}
+.track-row.playing .track-info h4{color:var(--accent)}
+
+/* ═══ LIGHTBOX ═══ */
+.lightbox{position:fixed;inset:0;z-index:9999;background:rgba(6,4,16,.97);display:none;align-items:center;justify-content:center;cursor:pointer}
+.lightbox.open{display:flex}
+.lightbox img,.lightbox video{max-width:90vw;max-height:90vh;object-fit:contain}
+.lb-close{position:absolute;top:20px;right:25px;font-size:1.5rem;color:rgba(192,184,168,.3);cursor:pointer;transition:color .3s}
+.lb-close:hover{color:var(--accent)}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);font-size:2rem;color:rgba(192,184,168,.2);cursor:pointer;padding:20px;transition:color .3s}
+.lb-nav:hover{color:var(--accent)}
+.lb-prev{left:10px}
+.lb-next{right:10px}
+
+/* ═══ FOOTER ═══ */
+.arc-footer{padding:60px 20px 30px;text-align:center;border-top:1px solid rgba(212,167,84,.04)}
+.arc-footer h3{font-family:'Cinzel Decorative',serif;font-size:.85rem;color:var(--accent);letter-spacing:5px;margin-bottom:8px}
+.arc-footer p{font-size:.6rem;color:rgba(192,184,168,.15);letter-spacing:3px}
+
+@media(max-width:1000px){.masonry{columns:3}}
+@media(max-width:700px){.masonry{columns:2}.topbar .brand{font-size:.7rem}}
+@media(max-width:450px){.masonry{columns:1}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="#">⟡ Arcane Archive</a>
+  <div style="display:flex;gap:20px">
+    <a href="portal.html">Portal</a>
+    <a href="library.html">Library</a>
+    <a href="throne.html">Throne</a>
+  </div>
+</div>
+
+<section class="archive-hero">
+  <h1>The Arcane Archive</h1>
+  <p>Every vision. Every realm. Every echo — preserved.</p>
+</section>
+
+<div class="filters">
+  <button class="filter-btn active" onclick="filterAll()">All</button>
+  <button class="filter-btn" onclick="filterType('sigil')">Sigils</button>
+  <button class="filter-btn" onclick="filterType('realm')">Realms</button>
+  <button class="filter-btn" onclick="filterType('char')">Characters</button>
+  <button class="filter-btn" onclick="filterType('vid')">Videos</button>
+</div>
+
+<div class="masonry" id="masonry">
+  <!-- SIGILS -->
+  <div class="m-item" data-type="sigil" onclick="openLB(0)"><img src="assets/img/sigil_purple_red.png" alt=""><div class="m-label"><h4>Sigil of Binding</h4><span>Purple · Red Nexus</span></div></div>
+  <div class="m-item" data-type="char" onclick="openLB(1)"><img src="assets/img/cvoland_signature.png" alt=""><div class="m-label"><h4>C. Voland</h4><span>Fire Signature</span></div></div>
+  <div class="m-item" data-type="sigil" onclick="openLB(2)"><img src="assets/img/pentagram_lava.png" alt=""><div class="m-label"><h4>Seal of Flame</h4><span>Molten Pentagram</span></div></div>
+  <div class="m-item vid-item" data-type="vid" onclick="openLB(3)"><video muted loop playsinline preload="metadata"><source src="assets/vid/Untitled_2026-04-16_04_55_46.mp4" type="video/mp4"></video><div class="m-label"><h4>Pentagram Awakening</h4><span>Video · 8s</span></div></div>
+  <div class="m-item" data-type="sigil" onclick="openLB(4)"><img src="assets/img/crescent_eye.png" alt=""><div class="m-label"><h4>Eye of the Crescent</h4><span>Blue Celestial</span></div></div>
+  <div class="m-item" data-type="realm" onclick="openLB(5)"><img src="assets/img/throne_eclipse.png" alt=""><div class="m-label"><h4>Throne of Eclipse</h4><span>Gothic Cathedral</span></div></div>
+  <div class="m-item vid-item" data-type="vid" onclick="openLB(6)"><video muted loop playsinline preload="metadata"><source src="assets/vid/Untitled_2026-04-16_04_57_30.mp4" type="video/mp4"></video><div class="m-label"><h4>Dark Vision I</h4><span>Video · 8s</span></div></div>
+  <div class="m-item" data-type="realm" onclick="openLB(7)"><img src="assets/img/sorcerer_throne.png" alt=""><div class="m-label"><h4>The Arcane Chamber</h4><span>Purple · Occult</span></div></div>
+  <div class="m-item" data-type="realm" onclick="openLB(8)"><img src="assets/img/astral_orb.png" alt=""><div class="m-label"><h4>Astral Observatory</h4><span>Crystal Sphere</span></div></div>
+  <div class="m-item" data-type="realm" onclick="openLB(9)"><img src="assets/img/gothic_library.png" alt=""><div class="m-label"><h4>The Forbidden Library</h4><span>Gothic · Arcane</span></div></div>
+  <div class="m-item vid-item" data-type="vid" onclick="openLB(10)"><video muted loop playsinline preload="metadata"><source src="assets/vid/Untitled_2026-04-16_05_00_23.mp4" type="video/mp4"></video><div class="m-label"><h4>Realm Shift</h4><span>Video · 8s</span></div></div>
+  <div class="m-item" data-type="char" onclick="openLB(11)"><img src="assets/img/fire_wizard.png" alt=""><div class="m-label"><h4>The Wandering Flame</h4><span>Fire Sorcerer</span></div></div>
+  <div class="m-item" data-type="realm" onclick="openLB(12)"><img src="assets/img/hellgate.png" alt=""><div class="m-label"><h4>Gate of the Damned</h4><span>Infernal Portal</span></div></div>
+  <div class="m-item" data-type="char" onclick="openLB(13)"><img src="assets/img/sorceress_queen.png" alt=""><div class="m-label"><h4>The Crimson Matriarch</h4><span>Queen of Fire</span></div></div>
+  <div class="m-item vid-item" data-type="vid" onclick="openLB(14)"><video muted loop playsinline preload="metadata"><source src="assets/vid/Untitled_2026-04-16_05_10_55.mp4" type="video/mp4"></video><div class="m-label"><h4>Cosmic Drift</h4><span>Video · 8s</span></div></div>
+  <div class="m-item" data-type="char" onclick="openLB(15)"><img src="assets/img/demon_king.png" alt=""><div class="m-label"><h4>Lord of Cinders</h4><span>Demon Sovereign</span></div></div>
+  <div class="m-item" data-type="realm" onclick="openLB(16)"><img src="assets/img/cosmic_mage.png" alt=""><div class="m-label"><h4>The Cosmic Array</h4><span>Dimensional Rift</span></div></div>
+  <div class="m-item" data-type="sigil" onclick="openLB(17)"><img src="assets/img/dark_vortex.png" alt=""><div class="m-label"><h4>Void Spiral</h4><span>Dark Matter</span></div></div>
+  <div class="m-item vid-item" data-type="vid" onclick="openLB(18)"><video muted loop playsinline preload="metadata"><source src="assets/vid/Untitled_2026-04-16_05_19_36.mp4" type="video/mp4"></video><div class="m-label"><h4>Nebula Gate</h4><span>Video · 13s</span></div></div>
+  <div class="m-item" data-type="sigil" onclick="openLB(19)"><img src="assets/img/gold_sigil.png" alt=""><div class="m-label"><h4>Sigil of Ascension</h4><span>Golden Nexus</span></div></div>
+  <div class="m-item" data-type="sigil" onclick="openLB(20)"><img src="assets/img/crystal_shard.png" alt=""><div class="m-label"><h4>Shard of Genesis</h4><span>Tech Crystal</span></div></div>
+  <div class="m-item" data-type="realm" onclick="openLB(21)"><img src="assets/img/altar_crystal1.png" alt=""><div class="m-label"><h4>The Nexus Altar</h4><span>Data Sanctum</span></div></div>
+  <div class="m-item vid-item" data-type="vid" onclick="openLB(22)"><video muted loop playsinline preload="metadata"><source src="assets/vid/Untitled_2026-04-16_05_43_39.mp4" type="video/mp4"></video><div class="m-label"><h4>Shadow Dance</h4><span>Video · 8s</span></div></div>
+  <div class="m-item" data-type="realm" onclick="openLB(23)"><img src="assets/img/altar_crystal2.png" alt=""><div class="m-label"><h4>The Convergence</h4><span>Crystal Array</span></div></div>
+  <div class="m-item" data-type="char" onclick="openLB(24)"><img src="assets/img/moon_sorceress.png" alt=""><div class="m-label"><h4>Keeper of Tides</h4><span>Lunar Enchantress</span></div></div>
+  <div class="m-item" data-type="char" onclick="openLB(25)"><img src="assets/img/duel_sorcerers.png" alt=""><div class="m-label"><h4>The Convergence War</h4><span>Lightning Duel</span></div></div>
+  <div class="m-item vid-item" data-type="vid" onclick="openLB(26)"><video muted loop playsinline preload="metadata"><source src="assets/vid/Untitled_2026-04-16_05_47_33.mp4" type="video/mp4"></video><div class="m-label"><h4>Flame Ritual</h4><span>Video · 8s</span></div></div>
+  <div class="m-item" data-type="char" onclick="openLB(27)"><img src="assets/img/selene_blue_queen.png" alt=""><div class="m-label"><h4>Selene</h4><span>The Moon Queen</span></div></div>
+  <div class="m-item" data-type="char" onclick="openLB(28)"><img src="assets/img/fire_queen_runes.png" alt=""><div class="m-label"><h4>Nyxaris</h4><span>The Shadow Crown</span></div></div>
+  <div class="m-item" data-type="realm" onclick="openLB(29)"><img src="assets/img/great_library_map.png" alt=""><div class="m-label"><h4>The Great Library</h4><span>Complete Map</span></div></div>
+  <div class="m-item vid-item" data-type="vid" onclick="openLB(30)"><video muted loop playsinline preload="metadata"><source src="assets/vid/Untitled_2026-04-16_05_52_12.mp4" type="video/mp4"></video><div class="m-label"><h4>Eclipse Rite</h4><span>Video · 8s</span></div></div>
+  <div class="m-item" data-type="realm" onclick="openLB(31)"><img src="assets/img/nebula_bg.png" alt=""><div class="m-label"><h4>The Void Between</h4><span>Cosmic Background</span></div></div>
+</div>
+
+<!-- MUSIC -->
+<section class="music-section">
+  <h2>Soundscapes</h2>
+  <div class="track-list" id="trackList">
+    <div class="track-row" onclick="arcTrack(0)"><div class="track-play"></div><div class="track-info"><h4>Lily — The Moonlight</h4><span>Ambient · Ethereal</span></div></div>
+    <div class="track-row" onclick="arcTrack(1)"><div class="track-play"></div><div class="track-info"><h4>Lily — The Echoes</h4><span>Dark Ambient</span></div></div>
+    <div class="track-row" onclick="arcTrack(2)"><div class="track-play"></div><div class="track-info"><h4>Silver Lullaby (Remastered)</h4><span>Atmospheric · Haunting</span></div></div>
+    <div class="track-row" onclick="arcTrack(3)"><div class="track-play"></div><div class="track-info"><h4>Forbidden Whisper (Remastered)</h4><span>Dark Orchestral</span></div></div>
+    <div class="track-row" onclick="arcTrack(4)"><div class="track-play"></div><div class="track-info"><h4>Lily — Moonlight II</h4><span>Ambient · Continuation</span></div></div>
+  </div>
+</section>
+
+<footer class="arc-footer">
+  <h3>The Arcane Archive</h3>
+  <p>© Dark Selene · C. Voland. All rights reserved.</p>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLB()">
+  <span class="lb-close">✕</span>
+  <span class="lb-nav lb-prev" onclick="event.stopPropagation();navLB(-1)">‹</span>
+  <div id="lbContent"></div>
+  <span class="lb-nav lb-next" onclick="event.stopPropagation();navLB(1)">›</span>
+</div>
+
+<audio id="arcAudio" preload="auto"></audio>
+
+<script>
+// ═══ FILTER ═══
+function filterAll(){
+  document.querySelectorAll('.m-item').forEach(el=>{el.style.display=''});
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.filter-btn').classList.add('active');
+}
+function filterType(t){
+  document.querySelectorAll('.m-item').forEach(el=>{el.style.display=el.dataset.type===t?'':'none'});
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// ═══ LIGHTBOX ═══
+const items=document.querySelectorAll('.m-item');
+let lbIdx=0;
+function openLB(i){
+  lbIdx=i;showLBContent();document.getElementById('lightbox').classList.add('open');
+}
+function closeLB(){document.getElementById('lightbox').classList.remove('open');const v=document.querySelector('#lbContent video');if(v)v.pause()}
+function navLB(d){lbIdx=(lbIdx+d+items.length)%items.length;showLBContent()}
+function showLBContent(){
+  const el=items[lbIdx];const cont=document.getElementById('lbContent');
+  const vid=el.querySelector('video');
+  if(vid){const src=vid.querySelector('source').src;cont.innerHTML=`<video autoplay loop muted playsinline style="max-width:90vw;max-height:90vh"><source src="${src}" type="video/mp4"></video>`}
+  else{const src=el.querySelector('img').src;cont.innerHTML=`<img src="${src}" style="max-width:90vw;max-height:90vh">`}
+}
+
+// ═══ MUSIC ═══
+const arcTracks=['assets/audio/Lily_The_Moonlight_.mp3','assets/audio/Lily_The_Echoes__1_.mp3','assets/audio/Silver_Lullaby__Remastered_.mp3','assets/audio/Forbidden_Whisper__Remastered_.mp3','assets/audio/Lily_The_Moonlight_2.mp3'];
+let arcIdx=-1;const arcA=document.getElementById('arcAudio');arcA.volume=.35;
+arcA.addEventListener('ended',()=>{arcIdx=(arcIdx+1)%arcTracks.length;arcTrack(arcIdx)});
+function arcTrack(i){
+  if(arcIdx===i&&!arcA.paused){arcA.pause();document.querySelectorAll('.track-row').forEach(r=>r.classList.remove('playing'));arcIdx=-1;return}
+  arcIdx=i;arcA.src=arcTracks[i];arcA.play().catch(()=>{});
+  document.querySelectorAll('.track-row').forEach((r,j)=>r.classList.toggle('playing',j===i));
+}
+
+// ═══ HOVER PLAY VIDEOS ═══
+document.querySelectorAll('.vid-item').forEach(el=>{
+  const v=el.querySelector('video');
+  el.addEventListener('mouseenter',()=>v.play().catch(()=>{}));
+  el.addEventListener('mouseleave',()=>{v.pause();v.currentTime=0});
+});
+</script>
+</body>
+</html>
