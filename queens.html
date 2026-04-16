@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selene & Nyxaris — The Two Crowns</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Philosopher:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#040208;color:#d0c8b8;font-family:'Philosopher',sans-serif;overflow-x:hidden}
+
+/* ═══ SPLIT HERO ═══ */
+.split-hero{display:flex;height:100vh;position:relative}
+.split-side{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.split-side img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;transition:transform 1.5s cubic-bezier(.25,.46,.45,.94),filter 1s}
+.split-side:hover img{transform:scale(1.05)}
+.split-moon img{filter:brightness(.35) saturate(.6) hue-rotate(-10deg)}
+.split-moon:hover img{filter:brightness(.5) saturate(.8)}
+.split-flame img{filter:brightness(.3) saturate(.7)}
+.split-flame:hover img{filter:brightness(.5) saturate(.9)}
+.split-side::after{content:'';position:absolute;inset:0;z-index:1}
+.split-moon::after{background:linear-gradient(135deg,rgba(20,30,80,.5),rgba(4,2,8,.7))}
+.split-flame::after{background:linear-gradient(225deg,rgba(80,10,10,.5),rgba(4,2,8,.7))}
+.split-label{position:relative;z-index:2;text-align:center}
+.split-label h2{font-family:'Cinzel Decorative',serif;font-size:clamp(1.5rem,4vw,3rem);letter-spacing:10px;margin-bottom:8px;opacity:0;animation:splitIn 1.5s ease forwards 1s}
+.split-label .role{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:6px;text-transform:uppercase;opacity:0;animation:splitIn 1.5s ease forwards 1.5s}
+.split-moon .split-label h2{color:#8ecae6}
+.split-moon .split-label .role{color:rgba(142,202,230,.4)}
+.split-flame .split-label h2{color:#e85d04}
+.split-flame .split-label .role{color:rgba(232,93,4,.4)}
+@keyframes splitIn{to{opacity:1;transform:translateY(0)}from{opacity:0;transform:translateY(30px)}}
+.center-line{position:absolute;left:50%;top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent 10%,rgba(212,167,84,.3) 50%,transparent 90%);z-index:5}
+.center-sigil{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:6;width:80px;height:80px}
+.center-sigil img{width:100%;filter:drop-shadow(0 0 30px rgba(212,167,84,.5));animation:cSigil 5s ease-in-out infinite}
+@keyframes cSigil{0%,100%{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(1.1)}}
+
+/* ═══ LORE SECTIONS ═══ */
+.lore-section{padding:100px 20px;max-width:800px;margin:0 auto;text-align:center}
+.lore-section h2{font-family:'Cinzel Decorative',serif;font-size:1.2rem;letter-spacing:8px;margin-bottom:40px}
+.moon-section h2{color:#8ecae6}
+.flame-section h2{color:#e85d04}
+.lore-section p{font-size:1.05rem;line-height:2;font-style:italic;color:rgba(208,200,184,.5)}
+.lore-img{width:100%;max-width:600px;margin:40px auto;border:1px solid rgba(255,255,255,.05)}
+.lore-img img{width:100%;filter:brightness(.6);transition:filter .5s}
+.lore-img:hover img{filter:brightness(.8)}
+
+/* ═══ DUALITY GRID ═══ */
+.duality-grid{display:grid;grid-template-columns:1fr 1fr;max-width:1100px;margin:0 auto;padding:60px 20px}
+.dual-col{padding:40px 30px}
+.dual-col h3{font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:5px;text-transform:uppercase;margin-bottom:20px}
+.dual-col.moon-col h3{color:#8ecae6}
+.dual-col.flame-col h3{color:#e85d04}
+.dual-col ul{list-style:none}
+.dual-col ul li{padding:12px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:.85rem;color:rgba(208,200,184,.4);transition:color .3s}
+.dual-col ul li:hover{color:rgba(208,200,184,.8)}
+.dual-col ul li span{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:3px;display:block;margin-bottom:3px}
+.dual-col.moon-col ul li span{color:rgba(142,202,230,.5)}
+.dual-col.flame-col ul li span{color:rgba(232,93,4,.5)}
+.dual-divider{width:1px;background:linear-gradient(180deg,transparent,rgba(212,167,84,.15),transparent);margin:0 auto}
+
+/* ═══ GALLERY STRIP ═══ */
+.gallery-strip{display:flex;overflow-x:auto;gap:10px;padding:60px 20px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.gallery-strip::-webkit-scrollbar{display:none}
+.strip-item{flex:0 0 auto;width:250px;height:380px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.03)}
+.strip-item img{width:100%;height:100%;object-fit:cover;filter:brightness(.4);transition:all .6s}
+.strip-item:hover img{filter:brightness(.7);transform:scale(1.05)}
+
+/* ═══ VIDEO THEATRE ═══ */
+.theatre{padding:80px 20px;text-align:center}
+.theatre h2{font-family:'Cinzel Decorative',serif;font-size:1rem;color:#d4a754;letter-spacing:8px;margin-bottom:40px}
+.theatre-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;max-width:1000px;margin:0 auto}
+.theatre-cell{aspect-ratio:9/16;position:relative;overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,.03)}
+.theatre-cell video{width:100%;height:100%;object-fit:cover;filter:brightness(.3);transition:filter .5s}
+.theatre-cell:hover video{filter:brightness(.6)}
+.theatre-cell::after{content:'▶';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:rgba(212,167,84,.5);font-size:1.5rem;transition:all .3s}
+.theatre-cell:hover::after{color:rgba(212,167,84,.9)}
+
+/* ═══ MUSIC BAR ═══ */
+.music-bar{position:fixed;bottom:0;left:0;right:0;z-index:5000;padding:10px 20px;background:rgba(4,2,8,.95);backdrop-filter:blur(15px);border-top:1px solid rgba(212,167,84,.08);display:flex;align-items:center;gap:15px;transform:translateY(100%);transition:transform .5s}
+.music-bar.show{transform:translateY(0)}
+.mb-toggle{width:35px;height:35px;border:1px solid rgba(212,167,84,.2);background:transparent;color:#d4a754;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:all .3s;flex-shrink:0}
+.mb-toggle:hover{border-color:#d4a754}
+.mb-tracks{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;flex:1}
+.mb-tracks::-webkit-scrollbar{display:none}
+.mb-track{flex:0 0 auto;padding:6px 14px;font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:2px;color:rgba(208,200,184,.3);border:1px solid rgba(255,255,255,.03);cursor:pointer;white-space:nowrap;transition:all .3s}
+.mb-track:hover,.mb-track.active{color:#d4a754;border-color:rgba(212,167,84,.2)}
+.mb-show-btn{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);z-index:4999;padding:6px 20px;font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:4px;color:rgba(212,167,84,.3);border:1px solid rgba(212,167,84,.08);background:rgba(4,2,8,.8);cursor:pointer;transition:all .3s}
+.mb-show-btn:hover{color:#d4a754;border-color:rgba(212,167,84,.2)}
+
+/* ═══ FOOTER ═══ */
+.q-footer{padding:80px 20px 40px;text-align:center}
+.q-footer h3{font-family:'Cinzel Decorative',serif;font-size:1rem;color:#d4a754;letter-spacing:6px;margin-bottom:10px}
+.q-footer p{font-size:.75rem;color:rgba(208,200,184,.2);letter-spacing:3px;font-style:italic}
+.q-footer small{display:block;margin-top:20px;font-size:.55rem;color:rgba(208,200,184,.1);letter-spacing:3px}
+
+/* ═══ ANIMATIONS ═══ */
+.anim{opacity:0;transform:translateY(40px);transition:all 1.2s}
+.anim.on{opacity:1;transform:translateY(0)}
+
+@media(max-width:768px){
+  .split-hero{flex-direction:column}
+  .split-side{min-height:50vh}
+  .center-line{left:0;right:0;top:50%;bottom:auto;width:auto;height:2px;background:linear-gradient(90deg,transparent,rgba(212,167,84,.3),transparent)}
+  .center-sigil{top:50%}
+  .duality-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- SPLIT HERO -->
+<div class="split-hero">
+  <div class="split-side split-moon">
+    <img src="assets/img/selene_blue_queen.png" alt="Selene">
+    <div class="split-label">
+      <h2>Selene</h2>
+      <div class="role">The Moon Queen · Keeper of Forgotten Light</div>
+    </div>
+  </div>
+  <div class="center-line"></div>
+  <div class="center-sigil"><img src="assets/img/sigil_purple_red.png" alt=""></div>
+  <div class="split-side split-flame">
+    <img src="assets/img/fire_queen_runes.png" alt="Nyxaris">
+    <div class="split-label">
+      <h2>Nyxaris</h2>
+      <div class="role">The Shadow Crown · Bearer of Unwritten Fate</div>
+    </div>
+  </div>
+</div>
+
+<!-- SELENE LORE -->
+<section class="lore-section moon-section anim">
+  <h2>The Moon Queen</h2>
+  <p>She holds the memory of every star that ever died. Her light is not warmth — it is truth, cold and precise, illuminating what others pray stays hidden. Where she walks, illusions shatter like frost on glass. She does not forgive. She does not forget. She simply sees — and that is enough to undo kingdoms.</p>
+  <div class="lore-img"><img src="assets/img/moon_sorceress.png" alt="Selene"></div>
+</section>
+
+<!-- NYXARIS LORE -->
+<section class="lore-section flame-section anim">
+  <h2>The Shadow Crown</h2>
+  <p>She writes destiny in flame and reads it in ash. Her silence is louder than thunder. Where she looks, kingdoms fold like paper in rain. Nyxaris does not conquer — she reveals the void that was always beneath the throne. And in that void, she builds empires that no light can reach.</p>
+  <div class="lore-img"><img src="assets/img/sorceress_queen.png" alt="Nyxaris"></div>
+</section>
+
+<!-- DUALITY COMPARISON -->
+<div class="duality-grid">
+  <div class="dual-col moon-col anim">
+    <h3>Selene's Domain</h3>
+    <ul>
+      <li><span>Element</span>Moonlight · Frost · Memory</li>
+      <li><span>Weapon</span>The Crescent Staff of Sight</li>
+      <li><span>Realm</span>The Silver Veil — the space between dream and waking</li>
+      <li><span>Power</span>Truth Sight — sees through all deception</li>
+      <li><span>Weakness</span>Cannot create — only reveal what already exists</li>
+    </ul>
+  </div>
+  <div class="dual-col flame-col anim">
+    <h3>Nyxaris' Domain</h3>
+    <ul>
+      <li><span>Element</span>Flame · Ash · Fate</li>
+      <li><span>Weapon</span>The Burning Grimoire</li>
+      <li><span>Realm</span>The Charred Throne — where empires are unmade</li>
+      <li><span>Power</span>Fate Writing — rewrites destiny itself</li>
+      <li><span>Weakness</span>Cannot preserve — everything she touches must transform</li>
+    </ul>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<div class="gallery-strip">
+  <div class="strip-item"><img src="assets/img/crescent_eye.png" alt=""></div>
+  <div class="strip-item"><img src="assets/img/astral_orb.png" alt=""></div>
+  <div class="strip-item"><img src="assets/img/throne_eclipse.png" alt=""></div>
+  <div class="strip-item"><img src="assets/img/demon_king.png" alt=""></div>
+  <div class="strip-item"><img src="assets/img/fire_wizard.png" alt=""></div>
+  <div class="strip-item"><img src="assets/img/cosmic_mage.png" alt=""></div>
+  <div class="strip-item"><img src="assets/img/hellgate.png" alt=""></div>
+  <div class="strip-item"><img src="assets/img/gold_sigil.png" alt=""></div>
+  <div class="strip-item"><img src="assets/img/crystal_shard.png" alt=""></div>
+  <div class="strip-item"><img src="assets/img/altar_crystal1.png" alt=""></div>
+  <div class="strip-item"><img src="assets/img/duel_sorcerers.png" alt=""></div>
+  <div class="strip-item"><img src="assets/img/cvoland_signature.png" alt=""></div>
+</div>
+
+<!-- VIDEO THEATRE -->
+<section class="theatre anim">
+  <h2>Visions</h2>
+  <div class="theatre-grid">
+    <div class="theatre-cell" onclick="tVid(this)"><video muted loop playsinline preload="metadata"><source src="assets/vid/Untitled_2026-04-16_04_55_46.mp4" type="video/mp4"></video></div>
+    <div class="theatre-cell" onclick="tVid(this)"><video muted loop playsinline preload="metadata"><source src="assets/vid/Untitled_2026-04-16_05_00_23.mp4" type="video/mp4"></video></div>
+    <div class="theatre-cell" onclick="tVid(this)"><video muted loop playsinline preload="metadata"><source src="assets/vid/Untitled_2026-04-16_05_14_14.mp4" type="video/mp4"></video></div>
+    <div class="theatre-cell" onclick="tVid(this)"><video muted loop playsinline preload="metadata"><source src="assets/vid/Untitled_2026-04-16_05_21_41.mp4" type="video/mp4"></video></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="q-footer">
+  <h3>Awaken · Remember · Become</h3>
+  <p>Two crowns. One saga. Infinite darkness between.</p>
+  <small>© Dark Selene. All rights reserved.</small>
+</footer>
+
+<!-- MUSIC BAR -->
+<button class="mb-show-btn" onclick="showMusicBar()">♫ Music</button>
+<div class="music-bar" id="mBar">
+  <button class="mb-toggle" id="mbToggle" onclick="mbPlay()">▶</button>
+  <div class="mb-tracks">
+    <div class="mb-track active" onclick="mbTrack(0)">Lily — The Moonlight</div>
+    <div class="mb-track" onclick="mbTrack(1)">Lily — The Echoes</div>
+    <div class="mb-track" onclick="mbTrack(2)">Silver Lullaby</div>
+    <div class="mb-track" onclick="mbTrack(3)">Forbidden Whisper</div>
+    <div class="mb-track" onclick="mbTrack(4)">Moonlight II</div>
+  </div>
+</div>
+<audio id="mbAudio" preload="auto"></audio>
+
+<script>
+const mbTracks=['assets/audio/Lily_The_Moonlight_.mp3','assets/audio/Lily_The_Echoes__1_.mp3','assets/audio/Silver_Lullaby__Remastered_.mp3','assets/audio/Forbidden_Whisper__Remastered_.mp3','assets/audio/Lily_The_Moonlight_2.mp3'];
+let mbIdx=0,mbOn=false;const mbA=document.getElementById('mbAudio');mbA.src=mbTracks[0];mbA.volume=.35;
+mbA.addEventListener('ended',()=>{mbIdx=(mbIdx+1)%mbTracks.length;mbTrack(mbIdx)});
+function showMusicBar(){document.getElementById('mBar').classList.add('show');document.querySelector('.mb-show-btn').style.display='none'}
+function mbPlay(){if(mbOn){mbA.pause();mbOn=false;document.getElementById('mbToggle').textContent='▶'}else{mbA.play().catch(()=>{});mbOn=true;document.getElementById('mbToggle').textContent='❚❚'}}
+function mbTrack(i){mbIdx=i;mbA.src=mbTracks[i];mbA.play().catch(()=>{});mbOn=true;document.getElementById('mbToggle').textContent='❚❚';document.querySelectorAll('.mb-track').forEach((t,j)=>t.classList.toggle('active',j===i))}
+function tVid(el){const v=el.querySelector('video');if(v.paused){v.play();el.querySelector('::after')&&(el.style.setProperty('--after-content',''))}else v.pause()}
+
+// Scroll animations
+const obs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('on')})},{threshold:.1});
+document.querySelectorAll('.anim').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
