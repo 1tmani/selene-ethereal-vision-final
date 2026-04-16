@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Great Library of Selene</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--amethyst:#b088f9;--amethyst-deep:#7b2ff7;--gold:#d4a754;--bone:#e8dcc8;--void:#030108;--ink:#0a0515}
+body{background:var(--void);color:var(--bone);font-family:'EB Garamond',serif;overflow-x:hidden;min-height:100vh}
+::selection{background:rgba(176,136,249,.3);color:#fff}
+
+/* ═══ CONSTELLATION CANVAS ═══ */
+#constellation{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ═══ HEADER ═══ */
+header{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 40px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,rgba(3,1,8,.95) 0%,transparent);backdrop-filter:blur(5px)}
+.lib-logo{font-family:'Cinzel Decorative',serif;font-size:1rem;color:var(--gold);letter-spacing:8px;text-decoration:none}
+.lib-nav{display:flex;gap:30px}
+.lib-nav a{font-family:'Cinzel',serif;font-size:.7rem;color:rgba(228,220,200,.4);letter-spacing:4px;text-decoration:none;text-transform:uppercase;transition:all .4s}
+.lib-nav a:hover{color:var(--amethyst)}
+
+/* ═══ HERO ═══ */
+.lib-hero{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 20px}
+.lib-hero-img{width:100%;max-width:700px;margin-bottom:40px;opacity:.85;animation:heroGlow 5s ease-in-out infinite alternate}
+.lib-hero-img img{width:100%;border:1px solid rgba(176,136,249,.1);filter:brightness(.8)}
+@keyframes heroGlow{from{filter:drop-shadow(0 0 20px rgba(176,136,249,.1))}to{filter:drop-shadow(0 0 60px rgba(176,136,249,.25))}}
+.lib-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.5rem,4vw,3rem);color:var(--gold);letter-spacing:10px;text-transform:uppercase;text-shadow:0 0 80px rgba(212,167,84,.2)}
+.lib-subtitle{font-family:'EB Garamond',serif;font-size:clamp(.9rem,1.8vw,1.3rem);color:rgba(228,220,200,.5);font-style:italic;margin-top:15px;letter-spacing:3px}
+.lib-tagline{font-family:'Cinzel',serif;font-size:.65rem;color:var(--amethyst);letter-spacing:6px;text-transform:uppercase;margin-top:30px;opacity:.7}
+.scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;animation:hintBob 2s ease-in-out infinite}
+.scroll-hint span{font-family:'Cinzel',serif;font-size:.55rem;color:rgba(228,220,200,.2);letter-spacing:5px;text-transform:uppercase}
+.scroll-hint::after{content:'';width:1px;height:30px;background:linear-gradient(180deg,rgba(176,136,249,.4),transparent)}
+@keyframes hintBob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+
+/* ═══ BOOKS CONSTELLATION MAP ═══ */
+.book-map{position:relative;z-index:1;padding:100px 20px;max-width:1300px;margin:0 auto}
+.map-title{text-align:center;font-family:'Cinzel Decorative',serif;font-size:1.2rem;color:var(--amethyst);letter-spacing:8px;text-transform:uppercase;margin-bottom:80px}
+.map-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:50px 40px}
+.book-node{position:relative;padding:30px;border:1px solid rgba(176,136,249,.08);background:rgba(10,5,21,.6);backdrop-filter:blur(8px);cursor:pointer;transition:all .6s;overflow:hidden}
+.book-node::before{content:'';position:absolute;top:0;left:50%;width:0;height:1px;background:var(--amethyst);transition:all .5s;transform:translateX(-50%)}
+.book-node:hover::before{width:100%}
+.book-node::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(176,136,249,.05),transparent 70%);opacity:0;transition:opacity .5s}
+.book-node:hover::after{opacity:1}
+.book-node:hover{border-color:rgba(176,136,249,.25);transform:translateY(-8px);box-shadow:0 25px 80px rgba(0,0,0,.5),0 0 60px rgba(123,47,247,.06)}
+.book-node-icon{width:60px;height:60px;margin:0 auto 20px;position:relative}
+.book-node-icon img{width:100%;height:100%;object-fit:cover;border-radius:50%;border:1px solid rgba(176,136,249,.2);filter:brightness(.6) saturate(.7)}
+.book-node:hover .book-node-icon img{filter:brightness(.8) saturate(1)}
+.book-node-icon::after{content:'';position:absolute;inset:-5px;border:1px solid rgba(176,136,249,.1);border-radius:50%;animation:nodeRing 4s linear infinite}
+@keyframes nodeRing{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.book-node h3{font-family:'Cinzel',serif;font-size:.9rem;color:var(--gold);letter-spacing:4px;text-transform:uppercase;text-align:center;margin-bottom:10px}
+.book-node p{font-family:'EB Garamond',serif;font-size:.85rem;color:rgba(228,220,200,.5);text-align:center;line-height:1.6;font-style:italic}
+.book-node .node-tag{display:block;text-align:center;margin-top:12px;font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:4px;color:var(--amethyst);opacity:.5}
+
+/* ═══ CENTRAL NEXUS (Selene Complete Saga) ═══ */
+.nexus{grid-column:1/-1;text-align:center;padding:60px 40px;border:1px solid rgba(212,167,84,.15);background:linear-gradient(135deg,rgba(10,5,21,.8),rgba(20,10,35,.6));position:relative}
+.nexus::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(212,167,84,.03),transparent 70%)}
+.nexus:hover{border-color:rgba(212,167,84,.35);box-shadow:0 0 100px rgba(212,167,84,.06)}
+.nexus h2{font-family:'Cinzel Decorative',serif;font-size:1.4rem;color:var(--gold);letter-spacing:8px;margin-bottom:10px}
+.nexus .nexus-sub{font-family:'Cinzel',serif;font-size:.7rem;color:var(--amethyst);letter-spacing:5px;text-transform:uppercase;margin-bottom:20px}
+.nexus p{max-width:600px;margin:0 auto;font-size:1rem;line-height:1.8;color:rgba(228,220,200,.6);font-style:italic}
+.nexus-sigil{width:80px;height:80px;margin:0 auto 25px;animation:float 5s ease-in-out infinite}
+.nexus-sigil img{width:100%;filter:drop-shadow(0 0 30px rgba(212,167,84,.3))}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+/* ═══ BOOK MODAL ═══ */
+.modal-overlay{position:fixed;inset:0;z-index:9000;background:rgba(3,1,8,.92);backdrop-filter:blur(20px);opacity:0;visibility:hidden;transition:all .5s;display:flex;align-items:center;justify-content:center}
+.modal-overlay.open{opacity:1;visibility:visible}
+.modal-content{max-width:700px;width:90%;max-height:85vh;overflow-y:auto;padding:50px 40px;border:1px solid rgba(176,136,249,.12);background:rgba(10,5,21,.95);position:relative;transform:scale(.9);transition:transform .5s}
+.modal-overlay.open .modal-content{transform:scale(1)}
+.modal-close{position:absolute;top:20px;right:20px;width:35px;height:35px;border:1px solid rgba(228,220,200,.15);background:transparent;color:var(--bone);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .3s}
+.modal-close:hover{border-color:var(--amethyst);color:var(--amethyst)}
+.modal-img{width:100%;height:300px;object-fit:cover;margin-bottom:30px;filter:brightness(.7)}
+.modal-content h2{font-family:'Cinzel Decorative',serif;font-size:1.3rem;color:var(--gold);letter-spacing:6px;margin-bottom:8px}
+.modal-content .modal-tagline{font-family:'Cinzel',serif;font-size:.6rem;color:var(--amethyst);letter-spacing:5px;text-transform:uppercase;margin-bottom:20px}
+.modal-content .modal-text{font-size:1rem;line-height:1.9;color:rgba(228,220,200,.7);font-style:italic}
+
+/* ═══ QUEENS SIDEBAR ═══ */
+.queens{position:relative;z-index:1;padding:100px 20px;max-width:1100px;margin:0 auto}
+.queens-flex{display:flex;gap:60px;align-items:center;flex-wrap:wrap;justify-content:center}
+.queen-panel{flex:1;min-width:300px;max-width:450px;text-align:center;padding:40px 30px;border:1px solid rgba(176,136,249,.06);transition:all .5s}
+.queen-panel:hover{border-color:rgba(176,136,249,.2)}
+.queen-panel img{width:200px;height:200px;border-radius:50%;object-fit:cover;object-position:top;border:2px solid rgba(176,136,249,.1);margin-bottom:20px;filter:brightness(.6);transition:all .6s}
+.queen-panel:hover img{filter:brightness(.8);border-color:rgba(176,136,249,.3)}
+.queen-panel h3{font-family:'Cinzel Decorative',serif;font-size:1rem;color:var(--gold);letter-spacing:5px;margin-bottom:5px}
+.queen-panel .queen-role{font-family:'Cinzel',serif;font-size:.6rem;color:var(--amethyst);letter-spacing:4px;text-transform:uppercase;margin-bottom:15px}
+.queen-panel p{font-size:.9rem;color:rgba(228,220,200,.45);line-height:1.7;font-style:italic}
+.queens-vs{font-family:'Cinzel Decorative',serif;font-size:2rem;color:rgba(176,136,249,.15);align-self:center}
+
+/* ═══ MUSIC CORNER ═══ */
+.music-fab{position:fixed;bottom:25px;left:25px;z-index:5000;width:45px;height:45px;border:1px solid rgba(176,136,249,.2);background:rgba(3,1,8,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .4s;color:var(--amethyst);font-size:.8rem}
+.music-fab:hover{border-color:var(--amethyst);box-shadow:0 0 25px rgba(176,136,249,.15)}
+.music-fab.active{border-color:var(--gold);color:var(--gold)}
+
+/* ═══ FOOTER ═══ */
+.lib-footer{position:relative;z-index:1;padding:80px 20px 40px;text-align:center;border-top:1px solid rgba(176,136,249,.05)}
+.lib-footer-mantra{font-family:'Cinzel Decorative',serif;font-size:1.1rem;color:var(--gold);letter-spacing:6px;margin-bottom:10px}
+.lib-footer-sub{font-family:'EB Garamond',serif;font-size:.85rem;color:rgba(228,220,200,.3);font-style:italic;letter-spacing:2px;margin-bottom:30px}
+.lib-footer-copy{font-family:'Cinzel',serif;font-size:.55rem;color:rgba(228,220,200,.15);letter-spacing:4px}
+
+/* ═══ SCROLL ANIM ═══ */
+.fade-in{opacity:0;transform:translateY(40px);transition:all 1s cubic-bezier(.4,0,.2,1)}
+.fade-in.vis{opacity:1;transform:translateY(0)}
+.fade-in-d1{transition-delay:.15s}.fade-in-d2{transition-delay:.3s}.fade-in-d3{transition-delay:.45s}
+.fade-in-d4{transition-delay:.6s}.fade-in-d5{transition-delay:.75s}
+
+@media(max-width:900px){.map-grid{grid-template-columns:1fr 1fr;gap:25px}.queens-flex{flex-direction:column}.queens-vs{display:none}}
+@media(max-width:600px){.map-grid{grid-template-columns:1fr}.lib-nav{display:none}header{padding:15px 20px}}
+</style>
+</head>
+<body>
+
+<canvas id="constellation"></canvas>
+
+<header>
+  <a href="#" class="lib-logo">⟡ Library of Selene</a>
+  <nav class="lib-nav">
+    <a href="#map">Books</a>
+    <a href="#queens">Crowns</a>
+    <a href="portal.html">Portal</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="lib-hero">
+  <div class="lib-hero-img fade-in">
+    <img src="assets/img/great_library_map.png" alt="The Great Library of Selene">
+  </div>
+  <h1 class="lib-title fade-in">The Great Library</h1>
+  <p class="lib-subtitle fade-in">Every book, a realm. Every word, a thread. All connected.</p>
+  <p class="lib-tagline fade-in">Selene · The Complete Saga</p>
+  <div class="scroll-hint"><span>Descend</span></div>
+</section>
+
+<!-- BOOK MAP -->
+<section class="book-map" id="map">
+  <h2 class="map-title fade-in">The Codex Constellation</h2>
+  <div class="map-grid">
+
+    <div class="book-node fade-in" onclick="openModal(0)">
+      <div class="book-node-icon"><img src="assets/img/gothic_library.png" alt=""></div>
+      <h3>Chronicles of Lunaris</h3>
+      <p>The birth of light and the fall of stars.</p>
+      <span class="node-tag">Saga · Origins</span>
+    </div>
+
+    <div class="book-node fade-in fade-in-d1" onclick="openModal(1)">
+      <div class="book-node-icon"><img src="assets/img/astral_orb.png" alt=""></div>
+      <h3>The Silent Prophecy</h3>
+      <p>Words that were never meant to be found.</p>
+      <span class="node-tag">Prophecy · Mystery</span>
+    </div>
+
+    <div class="book-node fade-in fade-in-d2" onclick="openModal(2)">
+      <div class="book-node-icon"><img src="assets/img/sorcerer_throne.png" alt=""></div>
+      <h3>The Book of Eclipses</h3>
+      <p>Where light dies and shadows bow.</p>
+      <span class="node-tag">Darkness · Codex</span>
+    </div>
+
+    <div class="book-node fade-in fade-in-d3" onclick="openModal(3)">
+      <div class="book-node-icon"><img src="assets/img/cosmic_mage.png" alt=""></div>
+      <h3>Echoes of Aeonis</h3>
+      <p>Ancient laws that compel mortals to speak.</p>
+      <span class="node-tag">Ancient · Law</span>
+    </div>
+
+    <div class="book-node fade-in fade-in-d4" onclick="openModal(4)">
+      <div class="book-node-icon"><img src="assets/img/hellgate.png" alt=""></div>
+      <h3>Secrets of the Fallen</h3>
+      <p>Where those who fell and shadows merged fate.</p>
+      <span class="node-tag">Fallen · Descent</span>
+    </div>
+
+    <div class="book-node fade-in fade-in-d5" onclick="openModal(5)">
+      <div class="book-node-icon"><img src="assets/img/crescent_eye.png" alt=""></div>
+      <h3>Realms Beyond Veil</h3>
+      <p>Worlds that exist outside the dream.</p>
+      <span class="node-tag">Dimensions · Veil</span>
+    </div>
+
+    <div class="book-node fade-in" onclick="openModal(6)">
+      <div class="book-node-icon"><img src="assets/img/dark_vortex.png" alt=""></div>
+      <h3>The Starbound Diaries</h3>
+      <p>Journeys written in stardust and blood.</p>
+      <span class="node-tag">Journey · Stars</span>
+    </div>
+
+    <div class="book-node fade-in fade-in-d1" onclick="openModal(7)">
+      <div class="book-node-icon"><img src="assets/img/gold_sigil.png" alt=""></div>
+      <h3>The Last Page</h3>
+      <p>The end is never the end. It is the turning.</p>
+      <span class="node-tag">Finale · Cycle</span>
+    </div>
+
+    <div class="book-node fade-in fade-in-d2" onclick="openModal(8)">
+      <div class="book-node-icon"><img src="assets/img/pentagram_lava.png" alt=""></div>
+      <h3>Dark Selene</h3>
+      <p>Power written in silence. The core grimoire.</p>
+      <span class="node-tag">Core · Grimoire</span>
+    </div>
+
+    <!-- NEXUS -->
+    <div class="nexus fade-in">
+      <div class="nexus-sigil"><img src="assets/img/sigil_purple_red.png" alt="Selene Sigil"></div>
+      <h2>Selene — The Complete Saga</h2>
+      <div class="nexus-sub">The Master Codex</div>
+      <p>All threads converge here. The Complete Saga weaves every chronicle, every prophecy, every fallen kingdom into the single unbroken tapestry of the Selene universe. To read it is to remember. To remember is to become.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- QUEENS -->
+<section class="queens" id="queens">
+  <h2 class="map-title fade-in">The Two Crowns</h2>
+  <div class="queens-flex">
+    <div class="queen-panel fade-in">
+      <img src="assets/img/selene_blue_queen.png" alt="Selene">
+      <h3>Selene</h3>
+      <div class="queen-role">The Moon Queen · Keeper of Forgotten Light</div>
+      <p>She holds the memory of every star that ever died. Her light is soft, patient, and inescapable. Where she walks, truth unravels itself willingly.</p>
+    </div>
+    <div class="queens-vs">⟡</div>
+    <div class="queen-panel fade-in fade-in-d2">
+      <img src="assets/img/fire_queen_runes.png" alt="Nyxaris">
+      <h3>Nyxaris</h3>
+      <div class="queen-role">The Shadow Crown · Bearer of Unwritten Fate</div>
+      <p>She writes destiny in flame and reads it in ash. Her silence is louder than thunder. Where she looks, kingdoms fold like paper in rain.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="lib-footer">
+  <div class="lib-footer-mantra">Awaken · Remember · Become</div>
+  <div class="lib-footer-sub">The Great Library of Selene — Every Book, a Realm</div>
+  <div class="lib-footer-copy">© Dark Selene. All rights reserved.</div>
+</footer>
+
+<!-- MUSIC -->
+<div class="music-fab" id="musicFab" onclick="toggleBgMusic()">♫</div>
+<audio id="bgAudio" loop preload="auto">
+  <source src="assets/audio/Silver_Lullaby__Remastered_.mp3" type="audio/mpeg">
+</audio>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal-content" id="modalContent">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <img class="modal-img" id="modalImg" src="" alt="">
+    <h2 id="modalTitle"></h2>
+    <div class="modal-tagline" id="modalTag"></div>
+    <div class="modal-text" id="modalText"></div>
+  </div>
+</div>
+
+<script>
+// ═══ CONSTELLATION BACKGROUND ═══
+const cv = document.getElementById('constellation'), cx = cv.getContext('2d');
+function rs(){cv.width=innerWidth;cv.height=innerHeight}
+rs(); addEventListener('resize',rs);
+const stars=Array.from({length:120},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,s:Math.random()*1.5+.3,o:Math.random()*.5+.1,p:Math.random()*Math.PI*2,sp:Math.random()*.01+.003}));
+function drawConst(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  stars.forEach(s=>{
+    s.p+=s.sp;const op=s.o+Math.sin(s.p)*.2;
+    cx.beginPath();cx.arc(s.x,s.y,s.s,0,Math.PI*2);cx.fillStyle=`rgba(176,136,249,${op})`;cx.fill();
+    if(s.s>1){cx.beginPath();cx.arc(s.x,s.y,s.s*4,0,Math.PI*2);cx.fillStyle=`rgba(176,136,249,${op*.1})`;cx.fill();}
+  });
+  // Draw faint connecting lines between nearby stars
+  for(let i=0;i<stars.length;i++){for(let j=i+1;j<stars.length;j++){
+    const d=Math.hypot(stars[i].x-stars[j].x,stars[i].y-stars[j].y);
+    if(d<150){cx.beginPath();cx.moveTo(stars[i].x,stars[i].y);cx.lineTo(stars[j].x,stars[j].y);cx.strokeStyle=`rgba(176,136,249,${.02*(1-d/150)})`;cx.stroke();}
+  }}
+  requestAnimationFrame(drawConst);
+}
+drawConst();
+
+// ═══ SCROLL REVEAL ═══
+const obs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('vis')})},{threshold:.1});
+document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+
+// ═══ MUSIC ═══
+const bgAudio=document.getElementById('bgAudio');bgAudio.volume=.3;
+let musicOn=false;
+function toggleBgMusic(){
+  if(musicOn){bgAudio.pause();musicOn=false;document.getElementById('musicFab').classList.remove('active');}
+  else{bgAudio.play().catch(()=>{});musicOn=true;document.getElementById('musicFab').classList.add('active');}
+}
+
+// ═══ MODAL ═══
+const books=[
+  {title:'Chronicles of Lunaris',tag:'Saga · Origins',img:'assets/img/gothic_library.png',text:'In the age before memory, when the first light cracked through the void, the Chronicles were begun. Not written — breathed. Each page holds the weight of dying suns and the lullabies of galaxies being born. To read them is to witness creation unraveling and reweaving itself, endlessly.'},
+  {title:'The Silent Prophecy',tag:'Prophecy · Mystery',img:'assets/img/astral_orb.png',text:'Sealed in a language that erases itself as it is read, the Silent Prophecy has driven scholars to madness and kingdoms to war. Its words shift between readings. Some say it predicts the end of all realms. Others insist it describes a beginning so pure that no mortal mind can hold it.'},
+  {title:'The Book of Eclipses',tag:'Darkness · Codex',img:'assets/img/sorcerer_throne.png',text:'A codex of eternal twilight. Each eclipse documented within its pages corresponds to a throne that fell, a bloodline severed, a power transferred in shadow. The Book does not merely record eclipses — it causes them. Those who open it cast darkness simply by reading.'},
+  {title:'Echoes of Aeonis',tag:'Ancient · Law',img:'assets/img/cosmic_mage.png',text:'The oldest laws of the universe, transcribed by beings who existed before time had a direction. Aeonis speaks of debts between dimensions, the price of immortality, and the one rule that even gods cannot break. Its echoes still reverberate through every spell ever cast.'},
+  {title:'Secrets of the Fallen',tag:'Fallen · Descent',img:'assets/img/hellgate.png',text:'This is the record of those who descended — not in defeat, but in purpose. Angels who chose the weight of flesh. Gods who traded omniscience for a single human lifetime. The Fallen are not broken; they are the bravest. And their secrets are the most dangerous knowledge in existence.'},
+  {title:'Realms Beyond Veil',tag:'Dimensions · Veil',img:'assets/img/crescent_eye.png',text:'Beyond the thin membrane that separates what is from what could be, entire civilizations thrive in geometries that would shatter a mortal mind. The Veil is not a barrier — it is a mercy. And this book teaches you how to lift it, one thread at a time.'},
+  {title:'The Starbound Diaries',tag:'Journey · Stars',img:'assets/img/dark_vortex.png',text:'Journeys written in stardust and blood. Each diary entry is a star that lived and died to illuminate the path forward. The traveler who wrote them walked between worlds, leaving behind only these luminous fragments — half-map, half-prayer.'},
+  {title:'The Last Page',tag:'Finale · Cycle',img:'assets/img/gold_sigil.png',text:'The end is never the end. It is the turning. The Last Page is not the conclusion of the saga — it is the moment where the reader becomes the author. Close the book, and you write the next chapter with your life. Every saga of Selene ends here. Every saga begins here.'},
+  {title:'Dark Selene',tag:'Core · Grimoire',img:'assets/img/pentagram_lava.png',text:'Power written in silence. The core grimoire of the entire Selene mythos. This is not a book you read — it is a book that reads you. Within its pages are the true names of things, the architecture of desire, and the one spell that can unmake reality and rebuild it in your image.'}
+];
+function openModal(i){
+  const b=books[i];
+  document.getElementById('modalImg').src=b.img;
+  document.getElementById('modalTitle').textContent=b.title;
+  document.getElementById('modalTag').textContent=b.tag;
+  document.getElementById('modalText').textContent=b.text;
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(e){
+  if(e&&e.target!==document.getElementById('modal')&&!e.target.classList.contains('modal-close'))return;
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+</script>
+</body>
+</html>
